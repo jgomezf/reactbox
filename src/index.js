@@ -10,19 +10,18 @@ const Item = ({ title, subtitle, ...props }) => {
     </span>
   );
 };
+
+function handleEvent(event) {
+  console.log(event);
+}
+
 const element = (
   <>
-    <Item title="Smels Like Teen Spirit" subtitle={<strong>Nirvana</strong>} />
+    <Item title="Smels Like Teen Spirit" subtitle="Nirvana" />
     <br />
-    <Item
-      title="Nookie"
-      subtitle={<strong>Limp Biskit</strong>}
-      style={{
-        borderColor: "blue",
-        borderWidth: 1,
-        borderStyle: "solid"
-      }}
-    />
+    <Item title="Nookie" subtitle="Limp Biskit" />
+    <br />
+    <button onClick={handleEvent}>Shuffle</button>
   </>
 );
 
