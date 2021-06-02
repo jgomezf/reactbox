@@ -1,6 +1,8 @@
 import React from "react";
 import ReactDom from "react-dom";
 
+import "./styles.css";
+
 const root = document.getElementById("app");
 
 // Component
@@ -80,14 +82,13 @@ class App extends React.Component {
         <br />
         <ul>
           {data.map((element, i) => (
-            <li key={i}>
-              <button
-                onClick={(event) => {
-                  this.play({ event, nextIndex: i });
-                }}
-              >
-                Play
-              </button>{" "}
+            <li
+              key={i}
+              onClick={(event) => {
+                this.play({ event, nextIndex: i });
+              }}
+              className={index === i ? "selected" : ""}
+            >
               <Item title={element.song} subtitle={element.artist} />
             </li>
           ))}
