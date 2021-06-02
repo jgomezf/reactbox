@@ -11,18 +11,44 @@ const Item = ({ title, subtitle, ...props }) => {
   );
 };
 
-function handleEvent(event) {
-  console.log(event);
+class App extends React.Component {
+  state = {
+    data: [
+      {
+        song: "Smells Like Teen Spirit",
+        artist: "Nirvana"
+      },
+      {
+        song: "Blind",
+        artist: "KoRn"
+      },
+      {
+        song: "Nookie",
+        artist: "Limp Biskit"
+      }
+    ],
+    index: 0
+  };
+
+  render() {
+    const { data, index } = this.state;
+
+    return (
+      <>
+        <Item title={data[index].song} subtitle={data[index].artist} />
+        <br />
+        <button
+          onClick={() => {
+            this.setState({
+              index: Math.floor(Math.random() * data.length)
+            });
+          }}
+        >
+          Shuffle
+        </button>
+      </>
+    );
+  }
 }
 
-const element = (
-  <>
-    <Item title="Smels Like Teen Spirit" subtitle="Nirvana" />
-    <br />
-    <Item title="Nookie" subtitle="Limp Biskit" />
-    <br />
-    <button onClick={handleEvent}>Shuffle</button>
-  </>
-);
-
-ReactDom.render(element, root);
+ReactDom.render(<App />, root);
