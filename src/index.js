@@ -1,18 +1,12 @@
 import React from "react";
 import ReactDom from "react-dom";
+import Player from "./components/Player";
+import Controls from "./components/Controls";
+import List from "./components/List";
 
 import "./styles.css";
 
 const root = document.getElementById("app");
-
-// Component
-const Item = ({ title, subtitle, ...props }) => {
-  return (
-    <span {...props}>
-      {title} - {subtitle}
-    </span>
-  );
-};
 
 //Container Component
 class App extends React.Component {
@@ -65,34 +59,30 @@ class App extends React.Component {
     });
   };
 
+  remove = () => {
+    const { index } = this.state;
+    if (index !== -1) {
+      this.setState(({ data }) => {
+        const filteredData = data.filter((_, i) => {
+          return i !== index;
+        });
+        return {
+          data: filteredData,
+          index: -1
+        };
+      });
+    }
+  };
+
   render() {
     const { data, index } = this.state;
 
     return (
       <>
-        {index === -1 ? (
-          <Item title="Untitled" subtitle="Unknown" />
-        ) : (
-          <Item title={data[index].song} subtitle={data[index].artist} />
-        )}
-        <br />
-        <button onClick={this.prev}>Previous</button>
-        <button onClick={this.shuffle}>Shuffle</button>
-        <button onClick={this.next}>Next</button>
-        <br />
-        <ul>
-          {data.map((element, i) => (
-            <li
-              key={i}
-              onClick={(event) => {
-                this.play({ event, nextIndex: i });
-              }}
-              className={index === i ? "selected" : ""}
-            >
-              <Item title={element.song} subtitle={element.artist} />
-            </li>
-          ))}
-        </ul>
+        <Player data={data} index={index} />
+        <Controls prev={this.prev} shuffle={this.shuffle} next={this.next} />
+        <List data={data} selected={index} onSelect={this.play} />
+        <button onClick={this.remove}>Remove</button>
       </>
     );
   }
