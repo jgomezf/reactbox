@@ -12,8 +12,8 @@ const root = document.getElementById("app");
 class App extends React.Component {
   constructor(args) {
     super(args);
-    this.song = null;
-    this.artist = null;
+    this.song = React.createRef();
+    this.artist = React.createRef();
   }
   state = {
     data: [
@@ -31,7 +31,8 @@ class App extends React.Component {
       }
     ],
     index: -1,
-    showForm: false
+    showForm: false,
+    error: ""
   };
 
   prev = () => {
@@ -81,21 +82,33 @@ class App extends React.Component {
   };
 
   toggleForm = () => {
-    this.setState(({ showForm }) => ({ showForm: !showForm }));
+    this.setState(({ showForm }) => ({
+      showForm: !showForm,
+      error: ""
+    }));
   };
 
   add = (event) => {
     event.preventDefault();
     //const { song, artist } = event.target.elements;
     const { data } = this.state;
+    const song = this.song.current.value;
+    const artist = this.artist.current.value;
+
+    if (!song || !artist) {
+      this.setState({
+        error: "Song and Artist are required"
+      });
+      return;
+    }
 
     this.setState(
       {
         data: [
           ...data,
           {
-            song: this.song.value,
-            artist: this.artist.value
+            song,
+            artist
           }
         ]
       },
@@ -106,27 +119,28 @@ class App extends React.Component {
   };
 
   render() {
-    const { data, index, showForm } = this.state;
+    const { data, index, showForm, error } = this.state;
 
     return (
       <>
         <Player data={data} index={index} />
         <Controls prev={this.prev} shuffle={this.shuffle} next={this.next} />
         <List data={data} selected={index} onSelect={this.play} />
-        <button onClick={this.toggleForm}>Add</button>
-        <button onClick={this.remove}>Remove</button>
-        {showForm && (
+
+        {showForm ? (
           <form onSubmit={this.add}>
-            <input type="text" name="song" ref={(node) => (this.song = node)} />
-            <input
-              type="text"
-              name="artist"
-              ref={(node) => (this.artist = node)}
-            />
+            <input type="text" name="song" ref={this.song} />
+            <input type="text" name="artist" ref={this.artist} />
             <button type="submit">Save</button>
             <button onClick={this.toggleForm}>Cancel</button>
           </form>
+        ) : (
+          <>
+            <button onClick={this.toggleForm}>Add</button>
+            <button onClick={this.remove}>Remove</button>
+          </>
         )}
+        {error && <p style={{ color: "red" }}>{error}</p>}
       </>
     );
   }
