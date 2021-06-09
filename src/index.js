@@ -3,6 +3,7 @@ import ReactDom from "react-dom";
 import Player from "./components/Player";
 import Controls from "./components/Controls";
 import List from "./components/List";
+import FormContainer from "./components/FormContainer";
 
 import "./styles.css";
 
@@ -10,30 +11,52 @@ const root = document.getElementById("app");
 
 //Container Component
 class App extends React.Component {
-  constructor(args) {
-    super(args);
-    this.song = React.createRef();
-    this.artist = React.createRef();
+  constructor(props) {
+    const index = props.index >= 0 ? props.index : -1;
+    super(props);
+    //1. acceder a los props
+    //2. declarar las variables
+    //3. Inicializar o calcular el estado en base a props
+    //NO utilizar setState
+    //NO  ajax
+
+    this.state = {
+      data: [],
+      index
+    };
+    console.log("constructor");
   }
-  state = {
-    data: [
-      {
-        song: "Smells Like Teen Spirit",
-        artist: "Nirvana"
-      },
-      {
-        song: "Blind",
-        artist: "KoRn"
-      },
-      {
-        song: "Nookie",
-        artist: "Limp Biskit"
-      }
-    ],
-    index: -1,
-    showForm: false,
-    error: ""
-  };
+
+  //lifeCycleHooks
+  //si y solo si una sola vez
+  componentDidMount() {
+    //ajax
+    console.log("componentDidMount App");
+    setTimeout(() => {
+      this.setState({
+        data: [
+          {
+            song: "Smells Like Teen Spirit",
+            artist: "Nirvana"
+          },
+          {
+            song: "Blind",
+            artist: "KoRn"
+          },
+          {
+            song: "Nookie",
+            artist: "Limp Biskit"
+          }
+        ]
+      });
+    }, 1000);
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    console.log("componentDidUpdate App");
+    console.log(prevProps, prevState, snapshot);
+    //ajax
+  }
 
   prev = () => {
     this.setState((nextState) => {
@@ -81,69 +104,34 @@ class App extends React.Component {
     }
   };
 
-  toggleForm = () => {
-    this.setState(({ showForm }) => ({
-      showForm: !showForm,
-      error: ""
-    }));
-  };
-
-  add = (event) => {
-    event.preventDefault();
-    //const { song, artist } = event.target.elements;
+  add = ({ song, artist }) => {
     const { data } = this.state;
-    const song = this.song.current.value;
-    const artist = this.artist.current.value;
 
-    if (!song || !artist) {
-      this.setState({
-        error: "Song and Artist are required"
-      });
-      return;
-    }
-
-    this.setState(
-      {
-        data: [
-          ...data,
-          {
-            song,
-            artist
-          }
-        ]
-      },
-      () => {
-        this.toggleForm();
-      }
-    );
+    this.setState({
+      data: [
+        ...data,
+        {
+          song: song.value,
+          artist: artist.value
+        }
+      ]
+    });
   };
 
   render() {
-    const { data, index, showForm, error } = this.state;
+    console.log("render App");
+
+    const { data, index } = this.state;
 
     return (
       <>
         <Player data={data} index={index} />
         <Controls prev={this.prev} shuffle={this.shuffle} next={this.next} />
         <List data={data} selected={index} onSelect={this.play} />
-
-        {showForm ? (
-          <form onSubmit={this.add}>
-            <input type="text" name="song" ref={this.song} />
-            <input type="text" name="artist" ref={this.artist} />
-            <button type="submit">Save</button>
-            <button onClick={this.toggleForm}>Cancel</button>
-          </form>
-        ) : (
-          <>
-            <button onClick={this.toggleForm}>Add</button>
-            <button onClick={this.remove}>Remove</button>
-          </>
-        )}
-        {error && <p style={{ color: "red" }}>{error}</p>}
+        <FormContainer add={this.add} remove={this.remove} />
       </>
     );
   }
 }
 
-ReactDom.render(<App />, root);
+ReactDom.render(<App index={-1} />, root);
