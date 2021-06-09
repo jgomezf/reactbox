@@ -4,6 +4,7 @@ import Player from "./components/Player";
 import Controls from "./components/Controls";
 import List from "./components/List";
 import FormContainer from "./components/FormContainer";
+import Panel from "./components/Panel";
 
 import "./styles.css";
 
@@ -119,36 +120,22 @@ class App extends React.Component {
   };
 
   render() {
+    //No setState
+    //NO Ajax
     console.log("render App");
 
     const { data, index } = this.state;
 
     return (
       <>
-        <div className="main-ui player">
-          <header>
-            <div className="line" />
-            <h1>ReactBox</h1>
-          </header>
-          <div className="inner">
-            <Player data={data} index={index} />
-            <Controls
-              prev={this.prev}
-              shuffle={this.shuffle}
-              next={this.next}
-            />
-          </div>
-        </div>
-        <div className="main-ui list">
-          <header>
-            <div className="line" />
-            <h1>ReactBox</h1>
-          </header>
-          <div className="inner">
-            <List list={data} selected={index} onSelect={this.play} />
-            <FormContainer add={this.add} remove={this.remove} />
-          </div>
-        </div>
+        <Panel title="ReactBox" wrapperClass="player">
+          <Player data={data} index={index} />
+          <Controls prev={this.prev} shuffle={this.shuffle} next={this.next} />
+        </Panel>
+        <Panel title="List" wrapperClass="list">
+          <List list={data} selected={index} onSelect={this.play} />
+          <FormContainer add={this.add} remove={this.remove} />
+        </Panel>
       </>
     );
   }
