@@ -1,7 +1,9 @@
 import React from "react";
 import Form from "./Form";
 
-class FormContainer extends React.Component {
+//PureComponent hace que no se vuelva a renderizar,
+//y si y solo si cambia alguno de los props
+class FormContainer extends React.PureComponent {
   state = {
     showForm: false,
     error: ""

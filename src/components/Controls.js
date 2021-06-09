@@ -1,6 +1,8 @@
 import React from "react";
 
 const Controls = ({ prev, shuffle, next }) => {
+  console.log("render Controls");
+
   return (
     <>
       <button onClick={prev}>Previous</button>
@@ -10,4 +12,6 @@ const Controls = ({ prev, shuffle, next }) => {
   );
 };
 
-export default Controls;
+export default React.memo(Controls, (prevProps, nextProps) => {
+  return true;
+});
