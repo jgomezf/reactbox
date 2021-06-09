@@ -1,14 +1,22 @@
 import React from "react";
+import "../styles.css";
 
 const Controls = ({ prev, shuffle, next }) => {
   console.log("render Controls");
 
   return (
-    <>
-      <button onClick={prev}>Previous</button>
+    <div className="control">
+      <button onClick={prev}>
+        <i className="fas fa-backward"></i>
+      </button>
       <button onClick={shuffle}>Shuffle</button>
-      <button onClick={next}>Next</button>
-    </>
+      <button>
+        <i className="fas fa-play"></i>
+      </button>
+      <button onClick={next}>
+        <i className="fa fa-forward"></i>
+      </button>
+    </div>
   );
 };
 

@@ -1,23 +1,24 @@
 import React from "react";
 import Item from "./Item";
+import "../styles.css";
 
-const List = ({ data = [], selected = -1, onSelect }) => {
+const List = ({ list = [], selected = -1, onSelect }) => {
   return (
-    <>
+    <div className="list b-black">
       <ul>
-        {data.map((element, i) => (
+        {list.map((element, i) => (
           <li
             key={i}
-            onClick={(event) => {
-              onSelect({ event, nextIndex: i });
+            onClick={() => {
+              onSelect({ nextIndex: i });
             }}
-            className={selected === i ? "selected" : ""}
+            className={selected === i ? "playing" : ""}
           >
             <Item title={element.song} subtitle={element.artist} />
           </li>
         ))}
       </ul>
-    </>
+    </div>
   );
 };
 

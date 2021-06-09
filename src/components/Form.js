@@ -1,4 +1,5 @@
 import React from "react";
+import "../styles.css";
 
 class Form extends React.Component {
   constructor(props) {
@@ -23,7 +24,7 @@ class Form extends React.Component {
   render() {
     console.log("render Form");
     return (
-      <form onSubmit={this.props.handleSave}>
+      <form onSubmit={this.props.handleSave} className="control">
         <input type="text" name="song" />
         <input type="text" name="artist" />
         <button type="submit">Save</button>

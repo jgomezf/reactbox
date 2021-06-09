@@ -1,9 +1,10 @@
 import React from "react";
 import Item from "./Item";
+import "../styles.css";
 
 const Player = ({ data = [], index = -1 }) => {
   return (
-    <div>
+    <div className="current-play b-black g-color">
       {index === -1 ? (
         <Item title="Untitled" subtitle="Unknown" />
       ) : (

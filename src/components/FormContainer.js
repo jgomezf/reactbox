@@ -1,5 +1,6 @@
 import React from "react";
 import Form from "./Form";
+import "../styles.css";
 
 //PureComponent hace que no se vuelva a renderizar,
 //y si y solo si cambia alguno de los props
@@ -42,10 +43,10 @@ class FormContainer extends React.PureComponent {
         {showForm ? (
           <Form toggleForm={this.toggleForm} handleSave={this.handleSave} />
         ) : (
-          <>
+          <div className="control">
             <button onClick={this.toggleForm}>Add</button>
             <button onClick={this.props.remove}>Remove</button>
-          </>
+          </div>
         )}
         {error && <p style={{ color: "red" }}>{error}</p>}
       </>

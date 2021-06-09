@@ -125,10 +125,30 @@ class App extends React.Component {
 
     return (
       <>
-        <Player data={data} index={index} />
-        <Controls prev={this.prev} shuffle={this.shuffle} next={this.next} />
-        <List data={data} selected={index} onSelect={this.play} />
-        <FormContainer add={this.add} remove={this.remove} />
+        <div className="main-ui player">
+          <header>
+            <div className="line" />
+            <h1>ReactBox</h1>
+          </header>
+          <div className="inner">
+            <Player data={data} index={index} />
+            <Controls
+              prev={this.prev}
+              shuffle={this.shuffle}
+              next={this.next}
+            />
+          </div>
+        </div>
+        <div className="main-ui list">
+          <header>
+            <div className="line" />
+            <h1>ReactBox</h1>
+          </header>
+          <div className="inner">
+            <List list={data} selected={index} onSelect={this.play} />
+            <FormContainer add={this.add} remove={this.remove} />
+          </div>
+        </div>
       </>
     );
   }
