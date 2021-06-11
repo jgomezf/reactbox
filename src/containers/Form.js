@@ -1,35 +1,47 @@
-import React from "react";
-import "../styles.css";
+import React, { useState } from "react";
 
-export class Form extends React.Component {
-  constructor(props) {
-    super(props);
-    console.log("constructor Form");
+export const Form = ({ add, remove }) => {
+  const [showForm, setShowForm] = useState(false);
+  const [error, setError] = useState("");
+
+  function toggleForm() {
+    setShowForm((prevShowForm) => !prevShowForm);
+    setError("");
   }
 
-  componentDidMount() {
-    console.log("componentDidMount Form");
-  }
+  const handleSave = (event) => {
+    event.preventDefault();
+    const { song, artist } = event.target.elements;
 
-  componentDidUpdate() {
-    console.log("componentDidUpdate Form");
-  }
+    if (!song.value && !artist.value) {
+      setError("Song and Artist are required");
+      return;
+    }
 
-  componentWillUnmount() {
-    console.log("componentWillUnmount Form");
-    // NO Ajax
-    // No setState
-  }
+    add({
+      song: song.value,
+      artist: artist.value
+    });
 
-  render() {
-    console.log("render Form");
-    return (
-      <form onSubmit={this.props.handleSave} className="control">
-        <input type="text" name="song" />
-        <input type="text" name="artist" />
-        <button type="submit">Save</button>
-        <button onClick={this.props.toggleForm}>Cancel</button>
-      </form>
-    );
-  }
-}
+    toggleForm();
+  };
+
+  return (
+    <>
+      {showForm ? (
+        <form onSubmit={handleSave} className="control">
+          <input type="text" name="song" />
+          <input type="text" name="artist" />
+          <button type="submit">Save</button>
+          <button onClick={toggleForm}>Cancel</button>
+        </form>
+      ) : (
+        <div className="control">
+          <button onClick={toggleForm}>Add</button>
+          <button onClick={remove}>Remove</button>
+        </div>
+      )}
+      {error && <p style={{ color: "red" }}>{error}</p>}
+    </>
+  );
+};
