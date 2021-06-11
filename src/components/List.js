@@ -1,8 +1,7 @@
 import React from "react";
-import Item from "./Item";
-import "../styles.css";
+import { Item } from "./Item";
 
-const List = ({ list = [], selected = -1, onSelect }) => {
+export const List = ({ list = [], selected = -1, onSelect }) => {
   return (
     <div className="list b-black">
       <ul>
@@ -21,5 +20,3 @@ const List = ({ list = [], selected = -1, onSelect }) => {
     </div>
   );
 };
-
-export default List;

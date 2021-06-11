@@ -1,144 +1,89 @@
-import React from "react";
-import ReactDom from "react-dom";
-import Player from "./components/Player";
-import Controls from "./components/Controls";
-import List from "./components/List";
-import FormContainer from "./components/FormContainer";
-import Panel from "./components/Panel";
+import React, { useState, useEffect } from "react";
+import ReactDOM from "react-dom";
+
+import { Panel } from "./components/Panel";
+import { Player } from "./components/Player";
+import { Controls } from "./components/Controls";
+import { List } from "./components/List";
+import { Form } from "./containers/Form";
 
 import "./styles.css";
 
 const root = document.getElementById("app");
 
-//Container Component
-class App extends React.Component {
-  constructor(props) {
-    const index = props.index >= 0 ? props.index : -1;
-    super(props);
-    //1. acceder a los props
-    //2. declarar las variables
-    //3. Inicializar o calcular el estado en base a props
-    //NO utilizar setState
-    //NO  ajax
+const ReactBox = ({ defaultIndex = -1 }) => {
+  const [data, setData] = useState([]);
+  const [index, setIndex] = useState(defaultIndex);
 
-    this.state = {
-      data: [],
-      index
-    };
-    console.log("constructor");
-  }
+  useEffect(() => {
+    setData([
+      {
+        song: "Smells Like Teen Spirit",
+        artist: "Nirvana"
+      },
+      {
+        song: "Blind",
+        artist: "KoRn"
+      },
+      {
+        song: "Nookie",
+        artist: "Limp Bizkit"
+      }
+    ]);
+  }, []);
 
-  //lifeCycleHooks
-  //si y solo si una sola vez
-  componentDidMount() {
-    //ajax
-    console.log("componentDidMount App");
-    setTimeout(() => {
-      this.setState({
-        data: [
-          {
-            song: "Smells Like Teen Spirit",
-            artist: "Nirvana"
-          },
-          {
-            song: "Blind",
-            artist: "KoRn"
-          },
-          {
-            song: "Nookie",
-            artist: "Limp Biskit"
-          }
-        ]
-      });
-    }, 1000);
-  }
-
-  componentDidUpdate(prevProps, prevState, snapshot) {
-    console.log("componentDidUpdate App");
-    console.log(prevProps, prevState, snapshot);
-    //ajax
-  }
-
-  prev = () => {
-    this.setState((nextState) => {
-      return {
-        index:
-          nextState.index <= 0 ? nextState.data.length - 1 : nextState.index - 1
-      };
-    });
+  const shuffle = () => {
+    setIndex(Math.floor(Math.random() * data.length));
   };
 
-  shuffle = () => {
-    const { data } = this.state;
-
-    this.setState({
-      index: Math.floor(Math.random() * data.length)
-    });
+  const next = () => {
+    setIndex((prevIndex) => (prevIndex + 1) % data.length);
   };
 
-  next = () => {
-    this.setState((prevState) => {
-      return {
-        index: (prevState.index + 1) % prevState.data.length
-      };
-    });
+  const prev = () => {
+    setIndex((prevIndex) =>
+      prevIndex - 1 < 0 ? data.length - 1 : prevIndex - 1
+    );
   };
 
-  play = ({ nextIndex }) => {
-    this.setState({
-      index: nextIndex
-    });
+  const play = ({ nextIndex }) => {
+    setIndex(nextIndex);
   };
 
-  remove = () => {
-    const { index } = this.state;
+  const remove = () => {
     if (index !== -1) {
-      this.setState(({ data }) => {
-        const filteredData = data.filter((_, i) => {
+      setData((prevData) => {
+        const filteredData = prevData.filter((item, i) => {
           return i !== index;
         });
-        return {
-          data: filteredData,
-          index: -1
-        };
+        return filteredData;
       });
+      setIndex(-1);
     }
   };
 
-  add = ({ song, artist }) => {
-    const { data } = this.state;
-
-    this.setState({
-      data: [
-        ...data,
-        {
-          song: song.value,
-          artist: artist.value
-        }
-      ]
-    });
+  const add = ({ song, artist }) => {
+    setData([
+      ...data,
+      {
+        song,
+        artist
+      }
+    ]);
   };
 
-  render() {
-    //No setState
-    //NO Ajax
-    console.log("render App");
+  return (
+    <>
+      <Panel title="ReactBox" wrapperClass="player">
+        <Player data={data} index={index} />
+        <Controls prev={prev} shuffle={shuffle} next={next} />
+      </Panel>
+      <Panel title="List" wrapperClass="list">
+        <List list={data} selected={index} onSelect={play} />
+        <Form add={add} remove={remove} />
+      </Panel>
+    </>
+  );
+};
 
-    const { data, index } = this.state;
-
-    return (
-      <>
-        <Panel title="ReactBox" wrapperClass="player">
-          <Player data={data} index={index} />
-          <Controls prev={this.prev} shuffle={this.shuffle} next={this.next} />
-        </Panel>
-        <Panel title="List" wrapperClass="list">
-          <List list={data} selected={index} onSelect={this.play} />
-          <FormContainer add={this.add} remove={this.remove} />
-        </Panel>
-      </>
-    );
-  }
-}
-
-ReactDom.render(<App index={-1} />, root);
+ReactDOM.render(<ReactBox />, root);

@@ -1,6 +1,6 @@
 import React from "react";
 
-const Panel = ({ children, title, wrapperClass }) => {
+export const Panel = ({ children, title, wrapperClass }) => {
   return (
     <div className={`main-ui ${wrapperClass}`}>
       <header>
@@ -11,5 +11,3 @@ const Panel = ({ children, title, wrapperClass }) => {
     </div>
   );
 };
-
-export default Panel;

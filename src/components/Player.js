@@ -1,8 +1,7 @@
 import React from "react";
-import Item from "./Item";
-import "../styles.css";
+import { Item } from "./Item";
 
-const Player = ({ data = [], index = -1 }) => {
+export const Player = ({ data = [], index = -1 }) => {
   return (
     <div className="current-play b-black g-color">
       {index === -1 ? (
@@ -13,5 +12,3 @@ const Player = ({ data = [], index = -1 }) => {
     </div>
   );
 };
-
-export default Player;

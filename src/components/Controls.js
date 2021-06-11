@@ -1,7 +1,6 @@
 import React from "react";
-import "../styles.css";
 
-const Controls = ({ prev, shuffle, next }) => {
+export const Controls = ({ prev, shuffle, next }) => {
   console.log("render Controls");
 
   return (
@@ -20,6 +19,7 @@ const Controls = ({ prev, shuffle, next }) => {
   );
 };
 
-export default React.memo(Controls, (prevProps, nextProps) => {
-  return true;
-});
+//optimizacion con React.memo
+// export default React.memo(Controls, (prevProps, nextProps) => {
+//   return true;
+// });

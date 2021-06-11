@@ -1,7 +1,7 @@
 import React from "react";
 import "../styles.css";
 
-class Form extends React.Component {
+export class Form extends React.Component {
   constructor(props) {
     super(props);
     console.log("constructor Form");
@@ -33,5 +33,3 @@ class Form extends React.Component {
     );
   }
 }
-
-export default Form;
